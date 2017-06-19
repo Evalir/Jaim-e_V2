@@ -21,7 +21,6 @@ const int redPin = 10;
 const int greenPin = 11;
 const int bluePin = 12;
 //LCD Screen connections
-LiquidCrystal lcd(22, 23, 24, 25, 26, 27);
 
 void setup() {
   // L293D
@@ -38,21 +37,15 @@ void setup() {
   pinMode(bluePin, OUTPUT);
   //MiniServoHead
   servoHead.attach(servoHeadPin);
-  lcd.begin(16, 2);
-  lcd.print("HOLA!");
-
   Serial.begin(9600);
 }
 
 void loop() {
-   lcd.setCursor(0, 1);
-   lcd.print(millis()/1000);
-   lcd.print("HELLO!");
-   //Sensor
+   //Sensor->Send pulse
    digitalWrite(hcTrig , HIGH);
    delayMicroseconds(50);
    digitalWrite(hcTrig , LOW);
-
+   //Sensor->measure distance
    duration = pulseIn(hcEcho , HIGH);
    distance = (duration/2) / 28.5 ;
    Serial.println(distance);
@@ -65,7 +58,7 @@ void loop() {
   {
     goForward();
   }
-
+  //Look north
    servoHead.write(80);
    delay(500);
 
@@ -104,7 +97,7 @@ void loop() {
   {
     goForward();
   }
-
+  //look east
    servoHead.write(135);
    delay(500);
 
@@ -141,11 +134,11 @@ void loop() {
   {
     goForward();
   }
-
+  //look west
    servoHead.write(30);
    delay(500);
 
-    digitalWrite(hcTrig , HIGH);
+   digitalWrite(hcTrig , HIGH);
    delayMicroseconds(50);
    digitalWrite(hcTrig , LOW);
    duration = pulseIn(hcEcho , HIGH);
@@ -164,6 +157,7 @@ void loop() {
   delay(500);
 }
 
+//antena code
 void rgbColor(int redColor, int greenColor, int blueColor) {
   analogWrite(redPin, redColor);
   analogWrite(greenPin, greenColor);
